@@ -18,13 +18,13 @@ test('multiFile appender', (batch) => {
     'should write to multiple files based on the loggingEvent property',
     (t) => {
       t.teardown(async () => {
-        await removeFiles(['logs/A.log', 'logs/B.log']);
+        await removeFiles(['templogs/A.log', 'templogs/B.log']);
       });
       log4js.configure({
         appenders: {
           multi: {
             type: 'multiFile',
-            base: 'logs/',
+            base: 'templogs/',
             property: 'categoryName',
             extension: '.log',
           },
@@ -36,8 +36,8 @@ test('multiFile appender', (batch) => {
       loggerA.info('I am in logger A');
       loggerB.info('I am in logger B');
       log4js.shutdown(() => {
-        t.match(fs.readFileSync('logs/A.log', 'utf-8'), 'I am in logger A');
-        t.match(fs.readFileSync('logs/B.log', 'utf-8'), 'I am in logger B');
+        t.match(fs.readFileSync('templogs/A.log', 'utf-8'), 'I am in logger A');
+        t.match(fs.readFileSync('templogs/B.log', 'utf-8'), 'I am in logger B');
         t.end();
       });
     }
@@ -47,13 +47,13 @@ test('multiFile appender', (batch) => {
     'should write to multiple files based on loggingEvent.context properties',
     (t) => {
       t.teardown(async () => {
-        await removeFiles(['logs/C.log', 'logs/D.log']);
+        await removeFiles(['templogs/C.log', 'templogs/D.log']);
       });
       log4js.configure({
         appenders: {
           multi: {
             type: 'multiFile',
-            base: 'logs/',
+            base: 'templogs/',
             property: 'label',
             extension: '.log',
           },
@@ -67,15 +67,15 @@ test('multiFile appender', (batch) => {
       loggerC.info('I am in logger C');
       loggerD.info('I am in logger D');
       log4js.shutdown(() => {
-        t.match(fs.readFileSync('logs/C.log', 'utf-8'), 'I am in logger C');
-        t.match(fs.readFileSync('logs/D.log', 'utf-8'), 'I am in logger D');
+        t.match(fs.readFileSync('templogs/C.log', 'utf-8'), 'I am in logger C');
+        t.match(fs.readFileSync('templogs/D.log', 'utf-8'), 'I am in logger D');
         t.end();
       });
     }
   );
 
   batch.test('should close file after timeout', (t) => {
-    /* checking that the file is closed after a timeout is done by looking at the debug logs
+    /* checking that the file is closed after a timeout is done by looking at the debug templogs
       since detecting file locks with node.js is platform specific.
      */
     const debugWasEnabled = debug.enabled('log4js:multiFile');
@@ -94,7 +94,7 @@ test('multiFile appender', (batch) => {
       await new Promise((resolve) => {
         log4js.shutdown(resolve);
       });
-      await removeFiles('logs/C.log');
+      await removeFiles('templogs/C.log');
       process.stderr.write = originalWrite;
       debug.enable(originalNamespace);
     });
@@ -104,7 +104,7 @@ test('multiFile appender', (batch) => {
       appenders: {
         multi: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'label',
           extension: '.log',
           timeout: timeoutMs,
@@ -148,7 +148,7 @@ test('multiFile appender', (batch) => {
         debug,
       },
     });
-    /* checking that the file is closed after a timeout is done by looking at the debug logs
+    /* checking that the file is closed after a timeout is done by looking at the debug templogs
       since detecting file locks with node.js is platform specific.
      */
     const debugWasEnabled = debug.enabled('log4js:multiFile');
@@ -167,7 +167,7 @@ test('multiFile appender', (batch) => {
       await new Promise((resolve) => {
         sandboxedLog4js.shutdown(resolve);
       });
-      await removeFiles('logs/C.log');
+      await removeFiles('templogs/C.log');
       process.stderr.write = originalWrite;
       debug.enable(originalNamespace);
     });
@@ -177,7 +177,7 @@ test('multiFile appender', (batch) => {
       appenders: {
         multi: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'label',
           extension: '.log',
           timeout: timeoutMs,
@@ -204,7 +204,7 @@ test('multiFile appender', (batch) => {
   });
 
   batch.test('should close file after extended timeout', (t) => {
-    /* checking that the file is closed after a timeout is done by looking at the debug logs
+    /* checking that the file is closed after a timeout is done by looking at the debug templogs
       since detecting file locks with node.js is platform specific.
      */
     const debugWasEnabled = debug.enabled('log4js:multiFile');
@@ -223,7 +223,7 @@ test('multiFile appender', (batch) => {
       await new Promise((resolve) => {
         log4js.shutdown(resolve);
       });
-      await removeFiles('logs/D.log');
+      await removeFiles('templogs/D.log');
       process.stderr.write = originalWrite;
       debug.enable(originalNamespace);
     });
@@ -233,7 +233,7 @@ test('multiFile appender', (batch) => {
       appenders: {
         multi: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'label',
           extension: '.log',
           timeout: timeoutMs,
@@ -271,7 +271,7 @@ test('multiFile appender', (batch) => {
   });
 
   batch.test('should clear interval for active timers on shutdown', (t) => {
-    /* checking that the file is closed after a timeout is done by looking at the debug logs
+    /* checking that the file is closed after a timeout is done by looking at the debug templogs
       since detecting file locks with node.js is platform specific.
      */
     const debugWasEnabled = debug.enabled('log4js:multiFile');
@@ -287,7 +287,7 @@ test('multiFile appender', (batch) => {
     debug.enable(`${originalNamespace}, log4js:multiFile`);
 
     t.teardown(async () => {
-      await removeFiles('logs/D.log');
+      await removeFiles('templogs/D.log');
       process.stderr.write = originalWrite;
       debug.enable(originalNamespace);
     });
@@ -297,7 +297,7 @@ test('multiFile appender', (batch) => {
       appenders: {
         multi: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'label',
           extension: '.log',
           timeout: timeoutMs,
@@ -332,13 +332,13 @@ test('multiFile appender', (batch) => {
     'should fail silently if loggingEvent property has no value',
     (t) => {
       t.teardown(async () => {
-        await removeFiles('logs/E.log');
+        await removeFiles('templogs/E.log');
       });
       log4js.configure({
         appenders: {
           multi: {
             type: 'multiFile',
-            base: 'logs/',
+            base: 'templogs/',
             property: 'label',
             extension: '.log',
           },
@@ -353,7 +353,7 @@ test('multiFile appender', (batch) => {
       loggerE.addContext('label', null);
       loggerE.info('I am also not in logger E');
       log4js.shutdown(() => {
-        const contents = fs.readFileSync('logs/E.log', 'utf-8');
+        const contents = fs.readFileSync('templogs/E.log', 'utf-8');
         t.match(contents, 'I am in logger E');
         t.notMatch(contents, 'I am not in logger E');
         t.notMatch(contents, 'I am also not in logger E');
@@ -364,13 +364,13 @@ test('multiFile appender', (batch) => {
 
   batch.test('should pass options to rolling file stream', (t) => {
     t.teardown(async () => {
-      await removeFiles(['logs/F.log', 'logs/F.log.1', 'logs/F.log.2']);
+      await removeFiles(['templogs/F.log', 'templogs/F.log.1', 'templogs/F.log.2']);
     });
     log4js.configure({
       appenders: {
         multi: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'label',
           extension: '.log',
           maxLogSize: 30,
@@ -386,11 +386,11 @@ test('multiFile appender', (batch) => {
     loggerF.info('I am also in logger F, awesome');
     loggerF.info('I am in logger F');
     log4js.shutdown(() => {
-      let contents = fs.readFileSync('logs/F.log', 'utf-8');
+      let contents = fs.readFileSync('templogs/F.log', 'utf-8');
       t.match(contents, 'I am in logger F');
-      contents = fs.readFileSync('logs/F.log.1', 'utf-8');
+      contents = fs.readFileSync('templogs/F.log.1', 'utf-8');
       t.match(contents, 'I am also in logger F');
-      contents = fs.readFileSync('logs/F.log.2', 'utf-8');
+      contents = fs.readFileSync('templogs/F.log.2', 'utf-8');
       t.match(contents, 'Being in logger F is the best');
       t.end();
     });
@@ -398,14 +398,14 @@ test('multiFile appender', (batch) => {
 
   batch.test('should inherit config from category hierarchy', (t) => {
     t.teardown(async () => {
-      await removeFiles('logs/test.someTest.log');
+      await removeFiles('templogs/test.someTest.log');
     });
     log4js.configure({
       appenders: {
         out: { type: 'stdout' },
         test: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'categoryName',
           extension: '.log',
         },
@@ -419,7 +419,7 @@ test('multiFile appender', (batch) => {
     const testLogger = log4js.getLogger('test.someTest');
     testLogger.debug('This should go to the file');
     log4js.shutdown(() => {
-      const contents = fs.readFileSync('logs/test.someTest.log', 'utf-8');
+      const contents = fs.readFileSync('templogs/test.someTest.log', 'utf-8');
       t.match(contents, 'This should go to the file');
       t.end();
     });
@@ -431,7 +431,7 @@ test('multiFile appender', (batch) => {
         out: { type: 'stdout' },
         test: {
           type: 'multiFile',
-          base: 'logs/',
+          base: 'templogs/',
           property: 'categoryName',
           extension: '.log',
         },
@@ -449,9 +449,9 @@ test('multiFile appender', (batch) => {
 
   batch.teardown(async () => {
     try {
-      const files = fs.readdirSync('logs');
-      await removeFiles(files.map((filename) => `logs/${filename}`));
-      fs.rmdirSync('logs');
+      const files = fs.readdirSync('templogs');
+      await removeFiles(files.map((filename) => `templogs/${filename}`));
+      fs.rmdirSync('templogs');
     } catch (e) {
       // doesn't matter
     }
