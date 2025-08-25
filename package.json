@@ -34,7 +34,7 @@
   },
   "scripts": {
     "prepare": "is-ci || husky install",
-    "test": "tap \"test/tap/**/*.js\" --cov --reporter=classic --coverage-report=text --coverage-report=html --timeout=100",
+    "test": "tap \"test/tap/**/*.js\" --cov --reporter=classic --coverage-report=text --timeout=100",
     "typings": "tsc -p types/tsconfig.json"
   },
   "directories": {
