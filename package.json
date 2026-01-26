@@ -35,6 +35,9 @@
   "scripts": {
     "prepare": "is-ci || husky install",
     "test": "tap \"test/tap/**/*.js\" --cov --reporter=classic --coverage-report=text --timeout=100",
+    "test:no-clean": "nyc --no-clean tap \"test/tap/**/*.js\" --reporter=classic --timeout=100",
+    "test:clean": "rm -rf coverage .nyc_output",
+    "test:report": "nyc report --reporter=text --reporter=lcov",
     "typings": "tsc -p types/tsconfig.json"
   },
   "directories": {
